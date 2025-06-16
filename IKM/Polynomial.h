@@ -40,7 +40,7 @@ private:
             if (ch == '–' || ch == '—') cleaned += '-';
             else cleaned += ch;
         }
-        return cleaned;1
+        return cleaned;
     }
 
     // Вставка с упорядочиванием
