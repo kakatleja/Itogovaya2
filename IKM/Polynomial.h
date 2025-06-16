@@ -163,7 +163,7 @@ public:
             else if (currentVar != variable)
                 throw runtime_error(string("Разные переменные: ") + variable + " и " + currentVar);
 
-            int power = 1; // Ïî óìîë÷àíèþ
+            int power = 1; / По умолчанию.
 
             if (i < term.length())
             {
