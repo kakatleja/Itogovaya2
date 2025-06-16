@@ -1,37 +1,37 @@
 #include <iostream>
-#include "Polynomial.h"
+#include "Polynomial.h"11
 
 int main()
 {
     setlocale(LC_ALL, "Russian");
-    cout << "=== Ðàáîòà ñ ìíîãî÷ëåíàìè ===" << endl;
+    cout << "=== Ð Ð°Ð±Ð¾Ñ‚Ð° Ñ Ð¼Ð½Ð¾Ð³Ð¾Ñ‡Ð»ÐµÐ½Ð°Ð¼Ð¸ ===" << endl;
 
     string filename;
-    cout << "Ââåäèòå èìÿ ôàéëà: ";
+    cout << "Ð’Ð²ÐµÐ´Ð¸Ñ‚Ðµ Ð¸Ð¼Ñ Ñ„Ð°Ð¹Ð»Ð°: ";
     cin >> filename;
 
     try
     {
         ifstream file(filename);
-        if (!file.is_open()) { cout << "\nÎøèáêà ÷òåíèÿ ôàéëà."; exit(0); }
+        if (!file.is_open()) { cout << "\nÐžÑˆÐ¸Ð±ÐºÐ° Ñ‡Ñ‚ÐµÐ½Ð¸Ñ Ñ„Ð°Ð¹Ð»Ð°."; exit(0); }
 
         string line;
         getline(file, line);
         file.close();
 
-        cout << "\nÈñõîäíûé ìíîãî÷ëåí: " << line << endl;
+        cout << "\nÐ˜ÑÑ…Ð¾Ð´Ð½Ñ‹Ð¹ Ð¼Ð½Ð¾Ð³Ð¾Ñ‡Ð»ÐµÐ½: " << line << endl;
 
         Polynomial poly;
         poly.LoadFromFile(filename);
 
-        cout << "\nÑ÷èòàííûé ìíîãî÷ëåí: " << poly.ToString() << endl;
+        cout << "\nÐ¡Ñ‡Ð¸Ñ‚Ð°Ð½Ð½Ñ‹Ð¹ Ð¼Ð½Ð¾Ð³Ð¾Ñ‡Ð»ÐµÐ½: " << poly.ToString() << endl;
 
         poly.AppendToFile(filename);
-        cout << "\nÐåçóëüòàò äîáàâëåí â ôàéë." << endl;
+        cout << "\nÐ ÐµÐ·ÑƒÐ»ÑŒÑ‚Ð°Ñ‚ Ð´Ð¾Ð±Ð°Ð²Ð»ÐµÐ½ Ð² Ñ„Ð°Ð¹Ð»." << endl;
     }
     catch (const exception& ex)
     {
-        cerr << "Îøèáêà: " << ex.what() << endl;
+        cerr << "ÐžÑˆÐ¸Ð±ÐºÐ°: " << ex.what() << endl;
     }
 
     return 0;
