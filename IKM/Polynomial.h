@@ -8,7 +8,7 @@
 
 using namespace std;
 
-// Óçåë îäíîíàïðàâëåííîãî ñïèñêà
+// Узел однонаправленного списка
 class Node
 {
 public:
@@ -24,13 +24,13 @@ public:
     }
 };
 
-// Êëàññ äëÿ ðàáîòû ñ ìíîãî÷ëåíàìè
+// Класс для работы с многочленами
 class Polynomial
 {
 private:
     Node* Head;
 
-    // Óäàëåíèå âñåõ ïðîáåëîâ è çàìåíà òèðå íà ìèíóñ
+    // Удаление всех пробелов и замена тире на минус
     string CleanString(const string& input)
     {
         string cleaned;
@@ -40,10 +40,10 @@ private:
             if (ch == '–' || ch == '—') cleaned += '-';
             else cleaned += ch;
         }
-        return cleaned;
+        return cleaned;1
     }
 
-    // Âñòàâêà ñ óïîðÿäî÷èâàíèåì
+    // Вставка с упорядочиванием
     void InsertTerm(int coeff, int power)
     {
         if (coeff == 0) return;
@@ -71,7 +71,7 @@ private:
             current->Coefficient += coeff;
             if (current->Coefficient == 0)
             {
-                // óäàëèòü óçåë
+                // удалить узел
                 if (prev) prev->Next = current->Next;
                 else Head = current->Next;
                 delete current;
@@ -99,13 +99,13 @@ public:
         }
     }
 
-    // Ïàðñèíã ñòðîêè â ñïèñîê
+     // Парсинг строки в список
     void ParseFromString(const string& inputRaw)
     {
         string input = CleanString(inputRaw);
 
         if (input.empty())
-            throw runtime_error("Ñòðîêà ïóñòà");
+            throw runtime_error("Строка пуста");
 
         if (input[0] != '+' && input[0] != '-')
             input = "+" + input;
@@ -122,17 +122,17 @@ public:
         }
         terms.push_back(input.substr(pos));
 
-        char variable = '\0'; // Ïåðåìåííàÿ, êîòîðàÿ äîëæíà áûòü âåçäå îäíà
+        char variable = '\0'; // Переменная, которая должна быть везде одна
 
         for (const string& term : terms)
         {
             if (term.length() < 2)
-                throw runtime_error("Íåêîððåêòíûé ÷ëåí: " + term);
+                throw runtime_error("Некорректный член: " + term);
 
             size_t i = 0;
             int sign = (term[i++] == '-') ? -1 : 1;
 
-            // Èçâëå÷åíèå êîýôôèöèåíòà
+            // Извлечение коэффициента
             int coeff = 0;
             while (i < term.length() && isdigit(term[i]))
             {
@@ -140,21 +140,21 @@ public:
                 ++i;
             }
 
-            if (coeff == 0 && (i == 1 || !isdigit(term[1]))) // ò.å. áûëî ïðîñòî "+x"
+            if (coeff == 0 && (i == 1 || !isdigit(term[1]))) // т.е. было просто "+x"
                 coeff = 1;
 
             coeff *= sign;
 
             if (i == term.length())
             {
-                // Ýòî ÷èñëî áåç ïåðåìåííîé, ñòåïåíü = 0
+                // Это число без переменной, степень = 0
                 InsertTerm(coeff, 0);
                 continue;
             }
 
-            // Îæèäàåòñÿ ïåðåìåííàÿ: ðîâíî îäíà áóêâà
+            // Ожидается переменная: ровно одна буква
             if (!isalpha(term[i]) || (i + 1 < term.length() && isalpha(term[i + 1])))
-                throw runtime_error("Íåêîððåêòíàÿ ïåðåìåííàÿ â: " + term);
+                throw runtime_error("Некорректная переменная в: " + term);
 
             char currentVar = term[i++];
 
@@ -168,10 +168,10 @@ public:
             if (i < term.length())
             {
                 if (term[i++] != '^')
-                    throw runtime_error("Îæèäàëñÿ ñèìâîë '^' â: " + term);
+                    throw runtime_error("Ожидался символ '^' в: " + term);
 
                 if (i == term.length())
-                    throw runtime_error("Ñòåïåíü íå óêàçàíà â: " + term);
+                    throw runtime_error("Степень не указана в: " + term);
 
                 power = 0;
                 while (i < term.length() && isdigit(term[i]))
@@ -181,14 +181,14 @@ public:
                 }
 
                 if (i != term.length())
-                    throw runtime_error("Íåäîïóñòèìûå ñèìâîëû ïîñëå ñòåïåíè â: " + term);
+                    throw runtime_error("Недопустимые символы после степени в: " + term);
             }
 
             InsertTerm(coeff, power);
         }
     }
 
-    // Âûâîä â ñòðîêîâîì ôîðìàòå
+    // Вывод в строковом формате
     string ToString() const
     {
         if (!Head) return "0";
@@ -221,11 +221,11 @@ public:
         return ss.str();
     }
 
-    // Çàãðóçêà èç ôàéëà
+    // Загрузка из файла
     void LoadFromFile(const string& filename)
     {
         ifstream file(filename);
-        if (!file.is_open()) throw runtime_error("Íå óäàëîñü îòêðûòü ôàéë.");
+        if (!file.is_open()) throw runtime_error("Не удалось открыть файл.");
 
         string line;
         getline(file, line);
@@ -234,13 +234,13 @@ public:
         ParseFromString(line);
     }
 
-    // Äîïèñàòü ðåçóëüòàò â ôàéë
+    // Дописать результат в файл
     void AppendToFile(const string& filename) const
     {
         ofstream file(filename, ios::app);
-        if (!file.is_open()) throw runtime_error("Íå óäàëîñü îòêðûòü ôàéë äëÿ çàïèñè.");
+        if (!file.is_open()) throw runtime_error("Не удалось открыть файл для записи.");
 
-        file << endl << "Ðåçóëüòàò: " << ToString() << endl;
+        file << endl << "Результат: " << ToString() << endl;
         file.close();
     }
 };
