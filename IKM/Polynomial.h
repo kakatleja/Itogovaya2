@@ -8,7 +8,7 @@
 
 using namespace std;
 
-// Узел однонаправленного списка
+// Г“Г§ГҐГ« Г®Г¤Г­Г®Г­Г ГЇГ°Г ГўГ«ГҐГ­Г­Г®ГЈГ® Г±ГЇГЁГ±ГЄГ 
 class Node
 {
 public:
@@ -24,26 +24,26 @@ public:
     }
 };
 
-// Класс для работы с многочленами
+// ГЉГ«Г Г±Г± Г¤Г«Гї Г°Г ГЎГ®ГІГ» Г± Г¬Г­Г®ГЈГ®Г·Г«ГҐГ­Г Г¬ГЁ
 class Polynomial
 {
 private:
     Node* Head;
 
-    // Удаление всех пробелов и замена тире на минус
+    // Г“Г¤Г Г«ГҐГ­ГЁГҐ ГўГ±ГҐГµ ГЇГ°Г®ГЎГҐГ«Г®Гў ГЁ Г§Г Г¬ГҐГ­Г  ГІГЁГ°ГҐ Г­Г  Г¬ГЁГ­ГіГ±
     string CleanString(const string& input)
     {
         string cleaned;
         for (char ch : input)
         {
             if (ch == ' ') continue;
-            if (ch == '–' || ch == '—') cleaned += '-';
+            if (ch == 'вЂ“' || ch == 'вЂ”') cleaned += '-';
             else cleaned += ch;
         }
         return cleaned;
     }
 
-    // Вставка с упорядочиванием
+    // Г‚Г±ГІГ ГўГЄГ  Г± ГіГЇГ®Г°ГїГ¤Г®Г·ГЁГўГ Г­ГЁГҐГ¬
     void InsertTerm(int coeff, int power)
     {
         if (coeff == 0) return;
@@ -71,7 +71,7 @@ private:
             current->Coefficient += coeff;
             if (current->Coefficient == 0)
             {
-                // удалить узел
+                // ГіГ¤Г Г«ГЁГІГј ГіГ§ГҐГ«
                 if (prev) prev->Next = current->Next;
                 else Head = current->Next;
                 delete current;
@@ -99,14 +99,13 @@ public:
         }
     }
 
-    // Парсинг строки в список
+    // ГЏГ Г°Г±ГЁГ­ГЈ Г±ГІГ°Г®ГЄГЁ Гў Г±ГЇГЁГ±Г®ГЄ
     void ParseFromString(const string& inputRaw)
     {
-        string input = inputRaw;
-        input.erase(remove(input.begin(), input.end(), ' '), input.end());
+        string input = CleanString(inputRaw);
 
         if (input.empty())
-            throw runtime_error("Строка пуста");
+            throw runtime_error("Г‘ГІГ°Г®ГЄГ  ГЇГіГ±ГІГ ");
 
         if (input[0] != '+' && input[0] != '-')
             input = "+" + input;
@@ -123,17 +122,17 @@ public:
         }
         terms.push_back(input.substr(pos));
 
-        char variable = '\0'; // Переменная, которая должна быть везде одна
+        char variable = '\0'; // ГЏГҐГ°ГҐГ¬ГҐГ­Г­Г Гї, ГЄГ®ГІГ®Г°Г Гї Г¤Г®Г«Г¦Г­Г  ГЎГ»ГІГј ГўГҐГ§Г¤ГҐ Г®Г¤Г­Г 
 
         for (const string& term : terms)
         {
             if (term.length() < 2)
-                throw runtime_error("Некорректный член: " + term);
+                throw runtime_error("ГЌГҐГЄГ®Г°Г°ГҐГЄГІГ­Г»Г© Г·Г«ГҐГ­: " + term);
 
             size_t i = 0;
             int sign = (term[i++] == '-') ? -1 : 1;
 
-            // Извлечение коэффициента
+            // Г€Г§ГўГ«ГҐГ·ГҐГ­ГЁГҐ ГЄГ®ГЅГґГґГЁГ¶ГЁГҐГ­ГІГ 
             int coeff = 0;
             while (i < term.length() && isdigit(term[i]))
             {
@@ -141,38 +140,38 @@ public:
                 ++i;
             }
 
-            if (coeff == 0 && (i == 1 || !isdigit(term[1]))) // т.е. было просто "+x"
+            if (coeff == 0 && (i == 1 || !isdigit(term[1]))) // ГІ.ГҐ. ГЎГ»Г«Г® ГЇГ°Г®Г±ГІГ® "+x"
                 coeff = 1;
 
             coeff *= sign;
 
             if (i == term.length())
             {
-                // Это число без переменной, степень = 0
+                // ГќГІГ® Г·ГЁГ±Г«Г® ГЎГҐГ§ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г®Г©, Г±ГІГҐГЇГҐГ­Гј = 0
                 InsertTerm(coeff, 0);
                 continue;
             }
 
-            // Ожидается переменная: ровно одна буква
+            // ГЋГ¦ГЁГ¤Г ГҐГІГ±Гї ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї: Г°Г®ГўГ­Г® Г®Г¤Г­Г  ГЎГіГЄГўГ 
             if (!isalpha(term[i]) || (i + 1 < term.length() && isalpha(term[i + 1])))
-                throw runtime_error("Некорректная переменная в: " + term);
+                throw runtime_error("ГЌГҐГЄГ®Г°Г°ГҐГЄГІГ­Г Гї ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г Гї Гў: " + term);
 
             char currentVar = term[i++];
 
             if (variable == '\0')
                 variable = currentVar;
             else if (currentVar != variable)
-                throw runtime_error("Разные переменные: " + string(1, variable) + " и " + string(1, currentVar));
+                throw runtime_error("ГђГ Г§Г­Г»ГҐ ГЇГҐГ°ГҐГ¬ГҐГ­Г­Г»ГҐ: " + string(1, variable) + " ГЁ " + string(1, currentVar));
 
-            int power = 1; // По умолчанию
+            int power = 1; // ГЏГ® ГіГ¬Г®Г«Г·Г Г­ГЁГѕ
 
             if (i < term.length())
             {
                 if (term[i++] != '^')
-                    throw runtime_error("Ожидался символ '^' в: " + term);
+                    throw runtime_error("ГЋГ¦ГЁГ¤Г Г«Г±Гї Г±ГЁГ¬ГўГ®Г« '^' Гў: " + term);
 
                 if (i == term.length())
-                    throw runtime_error("Степень не указана в: " + term);
+                    throw runtime_error("Г‘ГІГҐГЇГҐГ­Гј Г­ГҐ ГіГЄГ Г§Г Г­Г  Гў: " + term);
 
                 power = 0;
                 while (i < term.length() && isdigit(term[i]))
@@ -182,14 +181,14 @@ public:
                 }
 
                 if (i != term.length())
-                    throw runtime_error("Недопустимые символы после степени в: " + term);
+                    throw runtime_error("ГЌГҐГ¤Г®ГЇГіГ±ГІГЁГ¬Г»ГҐ Г±ГЁГ¬ГўГ®Г«Г» ГЇГ®Г±Г«ГҐ Г±ГІГҐГЇГҐГ­ГЁ Гў: " + term);
             }
 
             InsertTerm(coeff, power);
         }
     }
 
-    // Вывод в строковом формате
+    // Г‚Г»ГўГ®Г¤ Гў Г±ГІГ°Г®ГЄГ®ГўГ®Г¬ ГґГ®Г°Г¬Г ГІГҐ
     string ToString() const
     {
         if (!Head) return "0";
@@ -222,11 +221,11 @@ public:
         return ss.str();
     }
 
-    // Загрузка из файла
+    // Г‡Г ГЈГ°ГіГ§ГЄГ  ГЁГ§ ГґГ Г©Г«Г 
     void LoadFromFile(const string& filename)
     {
         ifstream file(filename);
-        if (!file.is_open()) throw runtime_error("Не удалось открыть файл.");
+        if (!file.is_open()) throw runtime_error("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г®ГІГЄГ°Г»ГІГј ГґГ Г©Г«.");
 
         string line;
         getline(file, line);
@@ -235,13 +234,13 @@ public:
         ParseFromString(line);
     }
 
-    // Дописать результат в файл
+    // Г„Г®ГЇГЁГ±Г ГІГј Г°ГҐГ§ГіГ«ГјГІГ ГІ Гў ГґГ Г©Г«
     void AppendToFile(const string& filename) const
     {
         ofstream file(filename, ios::app);
-        if (!file.is_open()) throw runtime_error("Не удалось открыть файл для записи.");
+        if (!file.is_open()) throw runtime_error("ГЌГҐ ГіГ¤Г Г«Г®Г±Гј Г®ГІГЄГ°Г»ГІГј ГґГ Г©Г« Г¤Г«Гї Г§Г ГЇГЁГ±ГЁ.");
 
-        file << endl << "Результат: " << ToString() << endl;
+        file << endl << "ГђГҐГ§ГіГ«ГјГІГ ГІ: " << ToString() << endl;
         file.close();
     }
 };
