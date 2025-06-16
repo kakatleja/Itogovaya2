@@ -161,7 +161,7 @@ public:
             if (variable == '\0')
                 variable = currentVar;
             else if (currentVar != variable)
-                throw runtime_error("Ðàçíûå ïåðåìåííûå: " + string(1, variable) + " è " + string(1, currentVar));
+                throw runtime_error(string("Разные переменные: ") + variable + " и " + currentVar);
 
             int power = 1; // Ïî óìîë÷àíèþ
 
